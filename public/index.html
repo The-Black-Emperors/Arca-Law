@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trupe Advogados - Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>TRUPE.</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="nav-link"><i class="fa-solid fa-house fa-fw"></i> <span>Área de trabalho</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fa-solid fa-calendar-days fa-fw"></i> <span>Agenda</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fa-solid fa-address-book fa-fw"></i> <span>Contatos</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fa-solid fa-headset fa-fw"></i> <span>Atendimentos</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fa-solid fa-gavel fa-fw"></i> <span>Processos e casos</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fa-solid fa-newspaper fa-fw"></i> <span>Publicações</span></a></li>
+                    
+                    <li class="has-submenu">
+                        <a href="#" class="nav-link active" id="financeiro-toggle">
+                            <i class="fa-solid fa-dollar-sign fa-fw"></i>
+                            <span>Financeiro</span>
+                            <i class="fa-solid fa-chevron-down chevron"></i>
+                        </a>
+                        <ul class="submenu open">
+                            <li><a href="#" class="nav-link active-sub">Painel Financeiro</a></li>
+                            <li><a href="#" class="nav-link">Gestão de Gastos</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#" class="nav-link"><i class="fa-solid fa-file-lines fa-fw"></i> <span>Documentos</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fa-solid fa-chart-line fa-fw"></i> <span>Indicadores</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fa-solid fa-bell fa-fw"></i> <span>Alertas</span></a></li>
+                    <li><a href="#" class="nav-link"><i class="fa-solid fa-circle-question fa-fw"></i> <span>Suporte</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" placeholder="Pesquisar contato, processo ou tarefa...">
+                </div>
+                <div class="user-actions">
+                    <button class="action-btn"><i class="fa-solid fa-plus"></i></button>
+                    <button class="action-btn"><i class="fa-solid fa-bell"></i></button>
+                    <div class="user-profile">
+                        <img src="https://i.pravatar.cc/40?u=jaymejr" alt="Avatar do Usuário">
+                        <span>Jayme Junior</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <button class="btn-primary">CONTRATAR</button>
+                </div>
+            </header>
+
+            <section class="content-area">
+                <div class="content-header">
+                    <h2>Painel Financeiro - Visão Geral</h2>
+                    <p>Aqui você verá gráficos e resumos das suas finanças.</p>
+                </div>
+                <div class="content-body">
+                    <div class="placeholder">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <h3>Conteúdo do Painel Financeiro</h3>
+                        <p>Gráficos e dados financeiros serão exibidos aqui.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
