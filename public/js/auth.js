@@ -9,7 +9,7 @@ function parseJwt(token) {
 export function checkAuth() {
     const token = localStorage.getItem('arca-law-token');
     if (!token) {
-        window.location.href = '/public/auth/login.html';
+        window.location.href = '/auth/login.html';
         throw new Error("Token não encontrado, redirecionando para login.");
     }
     return token;
@@ -26,5 +26,5 @@ export function getUserName() {
 
 export function handleLogout() {
     localStorage.removeItem('arca-law-token');
-    window.location.href = '/public/auth/login.html';
+    window.location.href = '/auth/login.html';
 }

@@ -8,7 +8,7 @@ registerForm.addEventListener('submit', async (event) => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     try {
-        const response = await fetch('http://localhost:3000/api/auth/register', {
+        const response = await fetch('/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password }),
@@ -18,7 +18,7 @@ registerForm.addEventListener('submit', async (event) => {
             throw new Error(data.message || 'Falha no registro.');
         }
         alert('Registro realizado com sucesso! Você será redirecionado para a página de login.');
-        window.location.href = '/public/auth/login.html';
+        window.location.href = '/auth/login.html';
     } catch (error) {
         errorMessageDiv.textContent = error.message;
     }

@@ -7,7 +7,7 @@ loginForm.addEventListener('submit', async (event) => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     try {
-        const response = await fetch('http://localhost:3000/api/auth/login', {
+        const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
@@ -17,7 +17,7 @@ loginForm.addEventListener('submit', async (event) => {
             throw new Error(data.message || 'Falha no login.');
         }
         localStorage.setItem('arca-law-token', data.token);
-        window.location.href = '/public/index.html';
+        window.location.href = '/index.html';
     } catch (error) {
         errorMessageDiv.textContent = error.message;
     }
