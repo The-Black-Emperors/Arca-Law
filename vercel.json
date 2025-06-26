@@ -1,23 +1,8 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "backend/src/app.js",
-            "use": "@vercel/node"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "backend/src/app.js"
-        },
-        {
-            "src": "/public/(.*)",
-            "dest": "/public/$1"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/public/index.html"
-        }
+    "rewrites": [
+      {
+        "source": "/api/:path*",
+        "destination": "/backend/src/app.js"
+      }
     ]
 }
