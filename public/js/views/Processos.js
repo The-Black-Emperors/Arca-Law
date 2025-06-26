@@ -16,6 +16,7 @@ export function initProcessosPage(container, router) {
             </form>
         </div>
         <div class="content-body">
+            <h3>Lista de Processos</h3>
             <div id="process-list"><div class="spinner-container"><div class="spinner"></div></div></div>
         </div>
     `;
@@ -77,6 +78,14 @@ export function initProcessosPage(container, router) {
 
     processListContainer.addEventListener('click', async (event) => {
         const target = event.target;
+        
+        if (target.matches('.process-link') || target.closest('.process-link')) {
+             event.preventDefault();
+             const id = target.closest('.process-item').dataset.id;
+             router.navigate(`/processo/${id}`);
+             return;
+        }
+
         const listItem = target.closest('.process-item');
         if (!listItem) return;
         
@@ -111,11 +120,6 @@ export function initProcessosPage(container, router) {
 
         if (target.matches('.cancel-btn')) {
             fetchProcesses();
-        }
-
-        if (target.matches('.process-link, .process-link *')) {
-            event.preventDefault();
-            router.navigate(`/processo/${processId}`);
         }
     });
 

@@ -34,6 +34,7 @@ export function initContatosPage(container) {
             displayContacts(contacts);
         } catch (error) {
             showToast(`Erro ao carregar contatos: ${error.message}`, 'error');
+            contactListContainer.innerHTML = '<p>Não foi possível carregar contatos.</p>';
         }
     }
 

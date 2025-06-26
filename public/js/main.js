@@ -7,29 +7,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const contentArea = document.getElementById('content-area');
     const userNameSpan = document.getElementById('user-name');
     const logoutBtn = document.getElementById('logout-btn');
+    const router = new Navigo("/", { hash: false });
 
-    try {
-        checkAuth();
+    function setActiveLink(path) {
+        document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
+            if (link.getAttribute('href') === path) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+
+    function startApp() {
         userNameSpan.textContent = getUserName();
         logoutBtn.addEventListener('click', handleLogout);
-
-        const router = new Navigo("/", { hash: false });
         
         router
-            .on('/processos', (match, query) => {
-                initProcessosPage(container, router);
+            .on('/processos', () => {
+                setActiveLink('/processos');
+                initProcessosPage(contentArea, router);
             })
             .on('/contatos', () => {
-                initContatosPage(container);
+                setActiveLink('/contatos');
+                initContatosPage(contentArea);
             })
             .on('/processo/:id', ({ data }) => {
-                initDetalheProcessoPage(container, data.id, router);
+                setActiveLink('/processos');
+                initDetalheProcessoPage(contentArea, data.id);
             })
             .on('/', () => {
                 router.navigate('/processos');
             })
             .notFound(() => {
-                container.innerHTML = '<h2>Página não encontrada</h2>';
+                contentArea.innerHTML = '<h2>Página não encontrada</h2>';
             })
             .resolve();
         
@@ -40,10 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 router.navigate(anchor.getAttribute('href'));
             }
         });
-
-    } catch(e) {
-        console.log('Redirecting due to auth check fail.');
     }
-    
-    const container = document.getElementById('content-area');
+
+    try {
+        checkAuth();
+        startApp();
+    } catch(e) {
+        console.error(e.message);
+    }
 });
