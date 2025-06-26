@@ -1,8 +1,36 @@
 {
-    "rewrites": [
-      {
-        "source": "/api/:path*",
-        "destination": "/backend/src/app.js"
-      }
-    ]
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/package.json",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["src/**"] }
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/backend/src/app.js"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "/public/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/public/js/$1"
+    },
+    {
+      "src": "/auth/(.*)",
+      "dest": "/public/auth/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/index.html"
+    }
+  ]
 }
