@@ -1,4 +1,5 @@
 const db = require('../database/db');
+const scraperService = require('../services/scraperService');
 
 const getAllProcesses = async (req, res) => {
     try {
@@ -75,10 +76,39 @@ const updateProcess = async (req, res) => {
     }
 };
 
+const checkProcessUpdates = async (req, res) => {
+    const { id } = req.params;
+    const { processUrl } = req.body;
+    if (!processUrl) {
+        return res.status(400).json({ message: "URL do processo é obrigatória." });
+    }
+    try {
+        const updates = await scraperService.scrapeProcessUpdates(processUrl);
+        if (updates.length === 0) {
+            return res.status(200).json({ message: 'Nenhuma movimentação encontrada para extrair da página.', count: 0 });
+        }
+        let newUpdatesCount = 0;
+        for (const update of updates) {
+            const formattedDate = update.date.split('/').reverse().join('-');
+            const queryText = 'INSERT INTO process_updates(process_id, update_date, description) VALUES($1, $2, $3) ON CONFLICT (process_id, update_date, description) DO NOTHING';
+            const result = await db.query(queryText, [id, formattedDate, update.description]);
+            if(result.rowCount > 0) {
+                newUpdatesCount++;
+            }
+        }
+        await db.query('UPDATE processos SET last_check_at = NOW() WHERE id = $1', [id]);
+        res.status(200).json({ message: `${newUpdatesCount} nova(s) movimentação(ões) salva(s).`, count: newUpdatesCount });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao verificar movimentações.', error_details: error.toString() });
+    }
+};
+
+
 module.exports = {
     getAllProcesses,
     getProcessById,
     createProcess,
     deleteProcess,
-    updateProcess
+    updateProcess,
+    checkProcessUpdates
 };
