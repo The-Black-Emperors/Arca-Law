@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer-core');
-const chromium = require('@sparticuz/chromium');
 
 async function scrapeProcessUpdates(processUrl) {
+    const chromium = (await import('@sparticuz/chromium')).default;
     let browser = null;
     let scrapedUpdates = [];
 
@@ -16,7 +16,7 @@ async function scrapeProcessUpdates(processUrl) {
 
         const page = await browser.newPage();
         await page.goto(processUrl, { waitUntil: 'networkidle2' });
-
+        
         scrapedUpdates = await page.evaluate(() => {
             const results = [];
             const rows = document.querySelectorAll('#tabelaTodasMovimentacoes tr');
@@ -44,7 +44,7 @@ async function scrapeProcessUpdates(processUrl) {
             await browser.close();
         }
     }
-
+    
     return scrapedUpdates;
 }
 
