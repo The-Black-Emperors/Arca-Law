@@ -179,3 +179,42 @@ a.process-link, a.process-link:visited {
 .contact-card { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 .contact-card h3 { font-weight: 600; margin-top: 0; }
 ul { padding-inline-start: 0; }
+
+.update-section {
+    margin-top: 30px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.update-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+.update-header h3 {
+    margin: 0;
+}
+.update-list {
+    list-style: none;
+    padding: 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.update-item {
+    border-left: 4px solid var(--accent-color);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+.update-item .date {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text-primary);
+}
+.update-item .description {
+    color: var(--text-secondary);
+}
