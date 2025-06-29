@@ -9,9 +9,9 @@ export function initProcessosPage(container, router) {
         </div>
         <div class="form-container">
             <h3>Adicionar Novo Processo</h3>
-            <form id="create-process-form" class="form-row">
-                <div class="form-group"><input type="text" id="numero-input" placeholder="Número do Processo" required></div>
-                <div class="form-group"><input type="text" id="autor-input" placeholder="Nome do Autor/Cliente" required></div>
+            <form id="create-process-form" class="form-row" style="align-items: flex-end;">
+                <div class="form-group" style="flex-grow: 1;"><input type="text" id="numero-input" placeholder="Número do Processo" required></div>
+                <div class="form-group" style="flex-grow: 1;"><input type="text" id="autor-input" placeholder="Nome do Autor/Cliente" required></div>
                 <button type="submit" class="btn-primary">Adicionar Processo</button>
             </form>
         </div>
@@ -46,18 +46,18 @@ export function initProcessosPage(container, router) {
                         <th>Número do Processo</th>
                         <th>Autor</th>
                         <th>Status</th>
-                        <th>Ações</th>
+                        <th class="actions">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     ${processes.map(process => `
-                        <tr data-id="${process.id}">
+                        <tr data-id="${process.id}" data-numero="${process.numero}" data-autor="${process.autor}">
                             <td><a href="/processo/${process.id}" data-navigo>${process.numero}</a></td>
                             <td>${process.autor}</td>
                             <td>${process.status}</td>
                             <td class="actions">
-                                <button class="btn-action edit-btn" data-id="${process.id}"><i class="fa-solid fa-pencil"></i></button>
-                                <button class="btn-action delete delete-btn" data-id="${process.id}"><i class="fa-solid fa-trash"></i></button>
+                                <button class="btn-action edit-btn" title="Editar"><i class="fa-solid fa-pencil"></i></button>
+                                <button class="btn-action delete delete-btn" title="Excluir"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                     `).join('')}
@@ -81,11 +81,13 @@ export function initProcessosPage(container, router) {
     });
 
     processListContainer.addEventListener('click', async (event) => {
-        const target = event.target.closest('button');
-        if (!target) return;
+        const button = event.target.closest('button');
+        if (!button) return;
 
-        const processId = target.dataset.id;
-        if (target.classList.contains('delete-btn')) {
+        const tr = button.closest('tr');
+        const processId = tr.dataset.id;
+
+        if (button.classList.contains('delete-btn')) {
             if (confirm('Tem certeza que deseja excluir este processo?')) {
                 try {
                     await api.delete(`/processos/${processId}`);
@@ -94,6 +96,41 @@ export function initProcessosPage(container, router) {
                 } catch (error) {
                     showToast(`Erro: ${error.message}`, 'error');
                 }
+            }
+        }
+
+        if (button.classList.contains('edit-btn')) {
+            const { numero, autor } = tr.dataset;
+            tr.innerHTML = `
+                <td colspan="4">
+                    <form class="edit-form" data-id="${processId}" style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" name="numero" value="${numero}" class="form-control" style="flex-grow: 1;" required>
+                        <input type="text" name="autor" value="${autor}" class="form-control" style="flex-grow: 1;" required>
+                        <button type="submit" class="btn-primary">Salvar</button>
+                        <button type="button" class="cancel-btn btn-logout">Cancelar</button>
+                    </form>
+                </td>
+            `;
+        }
+
+        if (button.classList.contains('cancel-btn')) {
+            fetchProcesses();
+        }
+    });
+
+    processListContainer.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (event.target.classList.contains('edit-form')) {
+            const form = event.target;
+            const processId = form.dataset.id;
+            const numero = form.querySelector('input[name="numero"]').value;
+            const autor = form.querySelector('input[name="autor"]').value;
+            try {
+                await api.put(`/processos/${processId}`, { numero, autor });
+                showToast('Processo atualizado com sucesso!');
+                fetchProcesses();
+            } catch (error) {
+                showToast(`Erro: ${error.message}`, 'error');
             }
         }
     });

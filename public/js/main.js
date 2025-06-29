@@ -2,7 +2,6 @@ import { checkAuth, handleLogout, getUserName } from './auth.js';
 import { initProcessosPage } from './views/Processos.js';
 import { initContatosPage } from './views/Contatos.js';
 import { initDetalheProcessoPage } from './views/DetalheProcesso.js';
-import { initDashboardPage } from './views/Dashboard.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const contentArea = document.getElementById('content-area');
@@ -21,15 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function handleNavigoLink(event) {
+        const anchor = event.target.closest('a[data-navigo]');
+        if (anchor) {
+            event.preventDefault();
+            router.navigate(anchor.getAttribute('href'));
+        }
+    }
+
     function startApp() {
         userNameSpan.textContent = getUserName();
         logoutBtn.addEventListener('click', handleLogout);
         
         router
-            .on('/', () => {
-                setActiveLink('/');
-                initDashboardPage(contentArea);
-            })
             .on('/processos', () => {
                 setActiveLink('/processos');
                 initProcessosPage(contentArea, router);
@@ -40,27 +43,19 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .on('/processo/:id', ({ data }) => {
                 setActiveLink('/processos');
-                initDetalheProcessoPage(contentArea, data.id);
+                initDetalheProcessoPage(contentArea, data.id, router);
+            })
+            .on('/', () => {
+                setActiveLink('/');
+                initDashboardPage(contentArea, router);
             })
             .notFound(() => {
                 contentArea.innerHTML = '<h2>Página não encontrada</h2>';
             })
             .resolve();
         
-        document.querySelector('.sidebar-nav').addEventListener('click', (e) => {
-            const anchor = e.target.closest('a[data-navigo]');
-            if (anchor) {
-                e.preventDefault();
-                router.navigate(anchor.getAttribute('href'));
-            }
-        });
-
-        const currentPath = window.location.pathname.replace('/public', '');
-        if (currentPath === '/index.html' || currentPath === '') {
-             router.navigate('/');
-        } else {
-             router.navigate(currentPath);
-        }
+        document.querySelector('.sidebar-nav').addEventListener('click', handleNavigoLink);
+        contentArea.addEventListener('click', handleNavigoLink);
     }
 
     try {

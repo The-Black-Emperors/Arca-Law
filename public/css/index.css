@@ -75,3 +75,8 @@ li { list-style: none; }
 .entry-item .description { font-weight: 500; }
 .entry-item .date { font-size: 0.9rem; color: var(--text-secondary); }
 .entry-item .value { font-weight: 600; text-align: right; }
+.data-table.compact td { padding: 12px 0; }
+.view-all-link { display: block; text-align: right; margin-top: 15px; font-weight: 600; color: var(--accent-color); text-decoration: none; }
+.summary-total { border-top: 1px solid var(--border-color); padding-top: 10px !important; margin-top: 10px; font-weight: 600; }
+.dashboard-card .widget-content ul li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+.dashboard-card .widget-content ul li:last-child { border-bottom: none; }
