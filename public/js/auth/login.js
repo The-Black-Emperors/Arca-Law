@@ -17,7 +17,7 @@ loginForm.addEventListener('submit', async (event) => {
             throw new Error(data.message || 'Falha no login.');
         }
         localStorage.setItem('arca-law-token', data.token);
-        window.location.href = '/index.html';
+        window.location.href = '/';
     } catch (error) {
         errorMessageDiv.textContent = error.message;
     }
