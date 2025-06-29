@@ -34,13 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .on('/processo/:id', ({ data }) => {
                 setActiveLink('/processos');
-                initDetalheProcessoPage(contentArea, data.id);
+                initDetalheProcessoPage(contentArea, data.id, router);
             })
             .on('/', () => {
-                router.navigate('/processos');
+                setActiveLink('/processos');
+                initProcessosPage(contentArea, router);
             })
             .notFound(() => {
-                contentArea.innerHTML = '<h2>Página não encontrada</h2>';
+                contentArea.innerHTML = '<h2>Página não encontrada</h2><p>Por favor, use o menu lateral para navegar.</p>';
             })
             .resolve();
         
