@@ -5,18 +5,17 @@ export function initProcessosPage(container, router) {
     const template = `
         <div class="content-header">
             <h2>Meus Processos</h2>
-            <p>Aqui você verá a lista de processos cadastrados no sistema.</p>
+            <p>Adicione e gerencie todos os seus casos.</p>
         </div>
         <div class="form-container">
             <h3>Adicionar Novo Processo</h3>
-            <form id="create-process-form">
-                <div class="form-group"><label for="numero-input">Número do Processo</label><input type="text" id="numero-input" required></div>
-                <div class="form-group"><label for="autor-input">Autor</label><input type="text" id="autor-input" required></div>
-                <button type="submit" class="btn-primary">Salvar Processo</button>
+            <form id="create-process-form" class="form-row">
+                <div class="form-group"><input type="text" id="numero-input" placeholder="Número do Processo" required></div>
+                <div class="form-group"><input type="text" id="autor-input" placeholder="Nome do Autor/Cliente" required></div>
+                <button type="submit" class="btn-primary">Adicionar Processo</button>
             </form>
         </div>
-        <div class="content-body">
-            <h3>Lista de Processos</h3>
+        <div class="data-table-container">
             <div id="process-list"><div class="spinner-container"><div class="spinner"></div></div></div>
         </div>
     `;
@@ -32,7 +31,6 @@ export function initProcessosPage(container, router) {
             displayProcesses(processes);
         } catch (error) {
             showToast(`Erro ao carregar processos: ${error.message}`, 'error');
-            processListContainer.innerHTML = `<p>Não foi possível carregar os processos.</p>`;
         }
     }
 
@@ -42,23 +40,29 @@ export function initProcessosPage(container, router) {
             return;
         }
         processListContainer.innerHTML = `
-            <ul class="space-y-4">
-                ${processes.map(process => `
-                    <li class="bg-white p-4 rounded-lg shadow process-item" data-id="${process.id}">
-                        <div class="process-info" data-numero="${process.numero}" data-autor="${process.autor}" data-status="${process.status}">
-                            <a href="/processo/${process.id}" class="process-link" data-navigo>
-                                <h3 class="font-bold">${process.numero}</h3>
-                                <p>Autor: ${process.autor}</p>
-                                <p>Status: ${process.status}</p>
-                            </a>
-                        </div>
-                        <div class="process-actions">
-                            <button class="edit-btn" data-id="${process.id}">Editar</button>
-                            <button class="delete-btn" data-id="${process.id}">Excluir</button>
-                        </div>
-                    </li>
-                `).join('')}
-            </ul>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Número do Processo</th>
+                        <th>Autor</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${processes.map(process => `
+                        <tr data-id="${process.id}">
+                            <td><a href="/processo/${process.id}" data-navigo>${process.numero}</a></td>
+                            <td>${process.autor}</td>
+                            <td>${process.status}</td>
+                            <td class="actions">
+                                <button class="btn-action edit-btn" data-id="${process.id}"><i class="fa-solid fa-pencil"></i></button>
+                                <button class="btn-action delete delete-btn" data-id="${process.id}"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
         `;
     }
 
@@ -77,21 +81,11 @@ export function initProcessosPage(container, router) {
     });
 
     processListContainer.addEventListener('click', async (event) => {
-        const target = event.target;
-        
-        if (target.matches('.process-link') || target.closest('.process-link')) {
-             event.preventDefault();
-             const id = target.closest('.process-item').dataset.id;
-             router.navigate(`/processo/${id}`);
-             return;
-        }
+        const target = event.target.closest('button');
+        if (!target) return;
 
-        const listItem = target.closest('.process-item');
-        if (!listItem) return;
-        
-        const processId = listItem.dataset.id;
-
-        if (target.matches('.delete-btn')) {
+        const processId = target.dataset.id;
+        if (target.classList.contains('delete-btn')) {
             if (confirm('Tem certeza que deseja excluir este processo?')) {
                 try {
                     await api.delete(`/processos/${processId}`);
@@ -100,42 +94,6 @@ export function initProcessosPage(container, router) {
                 } catch (error) {
                     showToast(`Erro: ${error.message}`, 'error');
                 }
-            }
-        }
-
-        if (target.matches('.edit-btn')) {
-            const infoDiv = listItem.querySelector('.process-info');
-            const { numero, autor, status } = infoDiv.dataset;
-            listItem.innerHTML = `
-                <form class="edit-form" data-id="${processId}">
-                    <div class="edit-form-group"><input type="text" name="numero" value="${numero}" required></div>
-                    <div class="edit-form-group"><input type="text" name="autor" value="${autor}" required></div>
-                    <div class="edit-form-actions">
-                        <button type="submit" class="btn-primary">Salvar</button>
-                        <button type="button" class="cancel-btn">Cancelar</button>
-                    </div>
-                </form>
-            `;
-        }
-
-        if (target.matches('.cancel-btn')) {
-            fetchProcesses();
-        }
-    });
-
-    processListContainer.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        if (event.target.matches('.edit-form')) {
-            const form = event.target;
-            const processId = form.dataset.id;
-            const numero = form.querySelector('input[name="numero"]').value;
-            const autor = form.querySelector('input[name="autor"]').value;
-            try {
-                await api.put(`/processos/${processId}`, { numero, autor });
-                showToast('Processo atualizado com sucesso!');
-                fetchProcesses();
-            } catch (error) {
-                showToast(`Erro: ${error.message}`, 'error');
             }
         }
     });
