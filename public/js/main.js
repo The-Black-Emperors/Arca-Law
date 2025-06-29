@@ -1,8 +1,9 @@
 import { checkAuth, handleLogout, getUserName } from './auth.js';
+import { initDashboardPage } from './views/Dashboard.js';
 import { initProcessosPage } from './views/Processos.js';
 import { initContatosPage } from './views/Contatos.js';
 import { initDetalheProcessoPage } from './views/DetalheProcesso.js';
-import { initDashboardPage } from './views/Dashboard.js';
+import { initAgendaPage } from './views/Agenda.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     try {
@@ -39,6 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .on('/contatos', () => {
                 setActiveLink('/contatos');
                 initContatosPage(contentArea, router);
+            })
+            .on('/agenda', () => {
+                setActiveLink('/agenda');
+                initAgendaPage(contentArea);
             })
             .on('/processo/:id', ({ data }) => {
                 setActiveLink('/processos');

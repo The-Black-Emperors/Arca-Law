@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
 </head>
 <body>
     <div class="app-container">
@@ -22,6 +23,7 @@
                     <li><a href="/" class="nav-link" data-navigo><i class="fa-solid fa-house fa-fw"></i> <span>Área de Trabalho</span></a></li>
                     <li><a href="/processos" class="nav-link" data-navigo><i class="fa-solid fa-gavel fa-fw"></i> <span>Processos</span></a></li>
                     <li><a href="/contatos" class="nav-link" data-navigo><i class="fa-solid fa-address-book fa-fw"></i> <span>Contatos</span></a></li>
+                    <li><a href="/agenda" class="nav-link" data-navigo><i class="fa-solid fa-calendar-days fa-fw"></i> <span>Agenda</span></a></li>
                 </ul>
             </nav>
         </aside>
@@ -43,6 +45,8 @@
             </div>
         </main>
     </div>
+    <div id="modal-backdrop" class="modal-backdrop"></div>
+    <div id="event-modal" class="event-modal"></div>
     
     <script src="https://cdn.jsdelivr.net/npm/navigo@8.11.1/lib/navigo.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
