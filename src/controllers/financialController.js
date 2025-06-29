@@ -28,7 +28,24 @@ const createEntry = async (req, res) => {
     }
 };
 
+const getFinancialSummary = async (req, res) => {
+    try {
+        const queryText = `
+            SELECT 
+                COALESCE(SUM(CASE WHEN type = 'RECEITA' AND status = 'PAGO' THEN value ELSE 0 END), 0) as total_receitas,
+                COALESCE(SUM(CASE WHEN type = 'DESPESA' AND status = 'PAGO' THEN value ELSE 0 END), 0) as total_despesas,
+                COALESCE(SUM(CASE WHEN type = 'RECEITA' AND status = 'PENDENTE' THEN value ELSE 0 END), 0) as a_receber
+            FROM financial_entries WHERE user_id = $1
+        `;
+        const { rows } = await db.query(queryText, [req.user.id]);
+        res.status(200).json(rows[0]);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao buscar resumo financeiro.', error_details: error.toString() });
+    }
+};
+
 module.exports = {
     getEntriesByProcessId,
-    createEntry
+    createEntry,
+    getFinancialSummary
 };
