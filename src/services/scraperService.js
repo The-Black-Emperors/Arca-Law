@@ -13,7 +13,6 @@ async function scrapeProcessUpdates(processUrl) {
             headless: chromium.headless,
             ignoreHTTPSErrors: true,
         });
-
         const page = await browser.newPage();
         await page.goto(processUrl, { waitUntil: 'networkidle2' });
         

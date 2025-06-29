@@ -2,8 +2,15 @@ const db = require('../database/db');
 const scraperService = require('../services/scraperService');
 
 const getAllProcesses = async (req, res) => {
+    const limit = req.query.limit;
     try {
-        const { rows } = await db.query('SELECT * FROM processos WHERE user_id = $1 ORDER BY created_at DESC', [req.user.id]);
+        let queryText = 'SELECT * FROM processos WHERE user_id = $1 ORDER BY created_at DESC';
+        const queryParams = [req.user.id];
+        if (limit) {
+            queryText += ` LIMIT $2`;
+            queryParams.push(limit);
+        }
+        const { rows } = await db.query(queryText, queryParams);
         res.status(200).json(rows);
     } catch (error) {
         res.status(500).json({ message: 'Erro do Servidor.', error_details: error.toString() });
@@ -102,7 +109,6 @@ const checkProcessUpdates = async (req, res) => {
         res.status(500).json({ message: 'Erro ao verificar movimentações.', error_details: error.toString() });
     }
 };
-
 
 module.exports = {
     getAllProcesses,
