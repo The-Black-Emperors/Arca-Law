@@ -23,14 +23,16 @@ export function initDashboardPage(container, router) {
     `;
     container.innerHTML = template;
 
-    loadProcessosWidget(router);
-    loadFinanceiroWidget();
+    const processosWidgetContent = container.querySelector('#processos-widget .widget-content');
+    const financeiroWidgetContent = container.querySelector('#financeiro-widget .widget-content');
+
+    loadProcessosWidget(processosWidgetContent);
+    loadFinanceiroWidget(financeiroWidgetContent);
 }
 
-async function loadProcessosWidget(router) {
-    const widgetContent = document.querySelector('#processos-widget .widget-content');
+async function loadProcessosWidget(widgetContent) {
     try {
-        const processos = await api.get('/processos?limit=5'); 
+        const processos = await api.get('/processos?limit=5');
         if (!processos || processos.length === 0) {
             widgetContent.innerHTML = '<p>Nenhum processo recente.</p>';
             return;
@@ -50,12 +52,11 @@ async function loadProcessosWidget(router) {
             <a href="/processos" class="view-all-link" data-navigo>Ver todos &rarr;</a>
         `;
     } catch (e) {
-        widgetContent.innerHTML = '<p style="color:red;">Não foi possível carregar.</p>';
+        widgetContent.innerHTML = '<p style="color:red;">Não foi possível carregar os processos.</p>';
     }
 }
 
-async function loadFinanceiroWidget() {
-    const widgetContent = document.querySelector('#financeiro-widget .widget-content');
+async function loadFinanceiroWidget(widgetContent) {
     try {
         const summary = await api.get('/financials/summary');
         const saldo = parseFloat(summary.total_receitas) - parseFloat(summary.total_despesas);
@@ -68,6 +69,6 @@ async function loadFinanceiroWidget() {
             </ul>
         `;
     } catch (e) {
-        widgetContent.innerHTML = '<p style="color:red;">Não foi possível carregar.</p>';
+        widgetContent.innerHTML = '<p style="color:red;">Não foi possível carregar o resumo.</p>';
     }
 }
